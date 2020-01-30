@@ -43,6 +43,12 @@ canary:
   # Please overwrite the `canary.host` in `values.yaml` in each environment repository (e.g., staging, production)
   host: acme.com
 
+
+sso:
+  enabled: false
+  domain: REPLACE_ME_DOMAIN
+  letsEncryptEnvironment: REPLACE_ME_LETSENCRYPT_ENVIRONMENT
+
 service:
   name: REPLACE_ME_APP_NAME
   type: ClusterIP

@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "fullname" . }}
+  annotations:
+      kubernetes.io/ingress.class: nginx
+  labels:
+    jenkins.io/chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+spec:
+  rules:
+  - host: {{ .Values.service.name }}-{{ .Release.Namespace }}.{{ .Values.sso.domain }}
+    http:
+      paths:
+{{- if .Values.sso.enabled -}}
+      - backend:
+          serviceName: sso-{{ .Values.service.name }}
+          servicePort: 80
+{{- else -}}
+      - backend:
+          serviceName: {{ .Values.service.name }}
+          servicePort: 80
+{{- end }}

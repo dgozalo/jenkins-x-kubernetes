@@ -1,0 +1,28 @@
+{{- if .Values.sso.enabled }}
+apiVersion: "jenkins.io/v1"
+kind: "SSO"
+metadata:
+  name: "sso-{{ .Values.service.name }}"
+spec:
+  oidcIssuerUrl: "https://dex-jx.{{ .Values.sso.domain }}"
+  skipExposeService: true
+  upstreamService: "{{ .Values.service.name }}"
+  forwardToken: true
+  domain: "{{ .Values.domain }}"
+  certIssuerName: "letsencrypt-{{ .Values.sso.letsEncryptEnvironment}}"
+  cookieSpec:
+    name: "sso-{{ .Values.service.name }}"
+    expire: "168h"
+    refresh: "60m"
+    secure: true
+    httpOnly: true
+  proxyImage: "quay.io/pusher/oauth2_proxy"
+  proxyImageTag: "v3.1.0"
+  proxyResources:
+    limits:
+      cpu: 100m
+      memory: 256Mi
+    requests:
+      cpu: 80m
+      memory: 128Mi
+{{- end }}
